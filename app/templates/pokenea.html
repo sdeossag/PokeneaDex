@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ pokenea.nombre }} — PokeneaDex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: drift 60s linear infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(50px, 50px); }
+    }
+
+    .pokedex-container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .pokedex {
+      background: linear-gradient(145deg, #ffffff, #f5f5f5);
+      border-radius: 30px;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+      overflow: hidden;
+      animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .pokedex-header {
+      background: linear-gradient(135deg, #dc0a2d 0%, #e8443a 100%);
+      padding: 25px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pokedex-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      animation: shine 3s ease-in-out infinite;
+    }
+
+    @keyframes shine {
+      0%, 100% { transform: translateX(0); opacity: 0; }
+      50% { transform: translateX(-100px); opacity: 1; }
+    }
+
+    .lights {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .light {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      position: relative;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .light:nth-child(1) {
+      background: radial-gradient(circle, #4fc3f7, #0288d1);
+      box-shadow: 0 0 15px rgba(79, 195, 247, 0.8);
+      animation-delay: 0s;
+    }
+
+    .light:nth-child(2) {
+      background: radial-gradient(circle, #ffeb3b, #fbc02d);
+      box-shadow: 0 0 15px rgba(255, 235, 59, 0.8);
+      animation-delay: 0.3s;
+    }
+
+    .light:nth-child(3) {
+      background: radial-gradient(circle, #66bb6a, #388e3c);
+      box-shadow: 0 0 15px rgba(102, 187, 106, 0.8);
+      animation-delay: 0.6s;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+    }
+
+    .logo {
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .pokedex-body {
+      padding: 40px;
+    }
+
+    .pokemon-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .image-section {
+      position: relative;
+    }
+
+    .image-container {
+      background: linear-gradient(145deg, #f5f7fa, #e8ecf1);
+      border-radius: 20px;
+      padding: 30px;
+      position: relative;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+      transition: transform 0.3s ease;
+    }
+
+    .image-container:hover {
+      transform: scale(1.05);
+    }
+
+    .image-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .pokemon-image {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+      animation: float 3s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .pokemon-name {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 5px;
+      line-height: 1.2;
+    }
+
+    .pokemon-ability {
+      font-size: 1.1rem;
+      color: #6b7280;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: #f3f4f6;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .pokemon-phrase {
+      background: linear-gradient(135deg, #667eea15, #764ba215);
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      border-radius: 12px;
+      font-style: italic;
+      color: #374151;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    .pokemon-phrase::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-size: 4rem;
+      color: #667eea;
+      opacity: 0.2;
+      font-family: Georgia, serif;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(145deg, #ffffff, #f9fafb);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border: 1px solid #e5e7eb;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      color: #1f2937;
+      font-weight: 700;
+    }
+
+    .footer-info {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f9fafb;
+      border-radius: 15px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.9rem;
+      border: 1px dashed #d1d5db;
+    }
+
+    .footer-info b {
+      color: #374151;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .pokemon-showcase {
+        grid-template-columns: 1fr;
+      }
+
+      .pokemon-name {
+        font-size: 2rem;
+      }
+
+      .pokedex-body {
+        padding: 25px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pokedex-container">
+    <div class="pokedex">
+      <div class="pokedex-header">
+        <div class="lights">
+          <div class="light"></div>
+          <div class="light"></div>
+          <div class="light"></div>
+        </div>
+        <div class="logo">POKENEA·DEX</div>
+      </div>
+      
+      <div class="pokedex-body">
+        <div class="pokemon-showcase">
+          <div class="image-section">
+            <div class="image-container">
+              <img src="{{ pokenea.imagen }}" alt="{{ pokenea.nombre }}" class="pokemon-image">
+            </div>
+          </div>
+          
+          <div class="info-section">
+            <div>
+              <h1 class="pokemon-name">{{ pokenea.nombre }}</h1>
+              <div class="pokemon-ability">{{ pokenea.habilidad }}</div>
+            </div>
+            
+            <div class="pokemon-phrase">
+              {{ pokenea.frase }}
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Altura</div>
+            <div class="stat-value">{{ pokenea.altura }} m</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-label">Contenedor</div>
+            <div class="stat-value">{{ container_id }}</div>
+          </div>
+        </div>
+
+        <div class="footer-info">
+          Sistema de información <b>PokeneaDex v2.0</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
