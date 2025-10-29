@@ -29,7 +29,7 @@ POKENEAS = [
         "id": 4,
         "nombre": "Maluma",
         "altura": 1.5,
-        "habilidad": "",
+        "habilidad": "Mas pretty mas dirty, te enamora y te hipnotiza",
         "imagen": "https://pokenea-imagenes-sdeossag.s3.us-east-1.amazonaws.com/maluma.jpg",
         "frase": "La humildad prevalece la fucking magia crece",
     },
